@@ -2,7 +2,16 @@ from kivy.app import App
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
+from kivy.uix.textinput import TextInput
 from kivy.uix.screenmanager import Screen,ScreenManager
+
+from instructions import*
+
+name = ''
+age = 0
+p1 = 0
+p2 = 0
+p3 = 0
 
 class ScrButton(Button):
     def __init__(self, screen, direction='right', goal='main',**kwargs):
@@ -20,63 +29,122 @@ class ScrButton(Button):
 class MainScreen(Screen):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.btn1 = ScrButton(self,'down','1',text = "1 экран",color = "#FFFFFF")
-        self.btn2 = ScrButton(self,'left','2',text = "2 экран",color = "#FF0000")
-        self.btn3 = ScrButton(self,'up','3',text = "3 экран",color = "#00FF00")
-        self.btn4 = ScrButton(self,'right','4',text = "4 экран",color = "#0000FF")
+        self.btn1 = Button(text = "Начать",color = "#FFFFFF",size_hint=(0.3, 0.2), pos_hint={'center_x': 0.5})
 
-        self.label = Label(text = "Нажми на любую кнопку")
+        self.name_input = TextInput(multiline=False)
+        self.age_input = TextInput(text ='0',multiline=False)
+        
+
+        self.label1 = Label(text = txt_instruction)
+        self.label2 = Label(text = "Имя:",halign = 'right')
+        self.label3 = Label(text = "Возраст:",halign = 'right')
 
         self.v1 = BoxLayout(orientation = "vertical",padding = 8,spacing = 8)
-        self.h1 = BoxLayout(spacing = 8)
-        self.v1.add_widget(self.btn1)
-        self.v1.add_widget(self.btn2)
-        self.v1.add_widget(self.btn3)
-        self.v1.add_widget(self.btn4)    
 
-        self.h1.add_widget(self.label)
-        self.h1.add_widget(self.v1) 
+        self.h1 = BoxLayout(spacing = 8,size_hint=(0.8, None), height='30sp')
+        self.h2 = BoxLayout(spacing = 8,size_hint=(0.8, None), height='30sp')
 
-        self.add_widget(self.h1)
+        self.h1.add_widget(self.label2)
+        self.h1.add_widget(self.name_input)
 
+        self.h2.add_widget(self.label3)
+        self.h2.add_widget(self.age_input)
 
+        self.v1.add_widget(self.label1)
+        self.v1.add_widget(self.h1)
+        self.v1.add_widget(self.h2)  
+        self.v1.add_widget(self.btn1)   
 
+        self.add_widget(self.v1)
+        self.btn1.on_press = self.next
+    def next(self):
+        global name,age
+        name = self.name_input.text
+        age = int(self.age_input.text)
+        self.manager.current = '1' 
 class FirstScreen(Screen):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.btn1 = ScrButton(self,'up','main',text = "Назад",color = "#FFFFFF")
-        self.label = Label(text = "Экран 1")
+        self.btn1 = Button(text = "Продолжить",color = "#FFFFFF",size_hint=(0.3, 0.2), pos_hint={'center_x': 0.5})
+
+        self.res_input = TextInput(text ='0',multiline=False)
+        
+
+        self.label1 = Label(text = txt_test1)
+        self.label2 = Label(text = "Введите результат:",halign = 'right')
+
         self.v1 = BoxLayout(orientation = "vertical",padding = 8,spacing = 8)
-        self.v1.add_widget(self.label)
-        self.v1.add_widget(self.btn1)
+
+        self.h1 = BoxLayout(spacing = 8,size_hint=(0.8, None), height='30sp')
+
+        self.h1.add_widget(self.label2)
+        self.h1.add_widget(self.res_input)
+
+        self.v1.add_widget(self.label1)
+        self.v1.add_widget(self.h1)
+        self.v1.add_widget(self.btn1)   
+
         self.add_widget(self.v1)
+        self.btn1.on_press = self.next
+    def next(self):
+        global p1
+        p1 = int(self.res_input.text)
+        self.manager.current = '2' 
 class SecondScreen(Screen):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.btn1 = ScrButton(self,'right','main',text = "Назад",color = "#FFFFFF")
-        self.label = Label(text = "Экран 2")
+        self.btn1 = Button(text = "Продолжить",color = "#FFFFFF",size_hint=(0.3, 0.2), pos_hint={'center_x': 0.5})
+        self.label1 = Label(text = txt_test2)
         self.v1 = BoxLayout(orientation = "vertical",padding = 8,spacing = 8)
-        self.v1.add_widget(self.label)
+        self.v1.add_widget(self.label1)
         self.v1.add_widget(self.btn1)
         self.add_widget(self.v1)
+        self.btn1.on_press = self.next
+    def next(self):
+        self.manager.current = '3' 
 class ThirdScreen(Screen):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)
-        self.btn1 = ScrButton(self,'down','main',text = "Назад",color = "#FFFFFF")
-        self.label = Label(text = "Экран 3")
+        self.btn1 = Button(text = "Завершить",color = "#FFFFFF",size_hint=(0.3, 0.2), pos_hint={'center_x': 0.5})
+
+        self.res1_input = TextInput(text ='0',multiline=False)
+        self.res2_input = TextInput(text ='0',multiline=False)
+        
+
+        self.label1 = Label(text = txt_test3)
+        self.label2 = Label(text = "Результат:",halign = 'right')
+        self.label3 = Label(text = "Результат после отдыха:",halign = 'right')
+
         self.v1 = BoxLayout(orientation = "vertical",padding = 8,spacing = 8)
-        self.v1.add_widget(self.label)
-        self.v1.add_widget(self.btn1)
+
+        self.h1 = BoxLayout(spacing = 8,size_hint=(0.8, None), height='30sp')
+        self.h2 = BoxLayout(spacing = 8,size_hint=(0.8, None), height='30sp')
+        self.h1.add_widget(self.label2)
+        self.h1.add_widget(self.res1_input)
+
+        self.h2.add_widget(self.label3)
+        self.h2.add_widget(self.res2_input)
+
+        self.v1.add_widget(self.label1)
+        self.v1.add_widget(self.h1)
+        self.v1.add_widget(self.h2)
+        self.v1.add_widget(self.btn1)   
+
         self.add_widget(self.v1)
+        self.btn1.on_press = self.next
+    def next(self):
+        global p2,p3
+        p2 = int(self.res1_input.text)
+        p3 = int(self.res2_input.text)
+        self.manager.current = '4' 
 class FourthScreen(Screen):
     def __init__(self,**kwargs):
         super().__init__(**kwargs)   
-        self.btn1 = ScrButton(self,'left','main',text = "Назад",color = "#FFFFFF")
         self.label = Label(text = "Экран 4")
         self.v1 = BoxLayout(orientation = "vertical",padding = 8,spacing = 8)
         self.v1.add_widget(self.label)
-        self.v1.add_widget(self.btn1)
-        self.add_widget(self.v1)     
+        self.add_widget(self.v1)   
+          
 class MyFirstApp(App):
 
     def build(self):
